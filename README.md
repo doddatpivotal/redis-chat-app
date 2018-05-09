@@ -52,4 +52,8 @@ kubectl apply -f k8s/redis-chat-redis-deployment.yml \
     -f k8s/redis-chat-web-service.yml
 ```
 
+Then query kubernetes to obtain the external url of the redis-chat app.
 
+```
+echo http://$(kubectl get nodes -o go-template='{{index ((index .items 0).metadata.labels) "spec.ip"}}'):$(kubectl get services/redis-chat-web-service -o go-template='{{(index .spec.ports 0).nodePort}}')
+```

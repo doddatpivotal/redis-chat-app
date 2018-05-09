@@ -27,3 +27,29 @@ You can chat with other participants in the room by typing in the message box at
 To simulate multiple users, you can open additional browser windows to add new participants to the chatroom.  New participants are added to the list on the left.  When you close a browser window, the participants are removed from the list of the other chatrooms, but the message history is retained.
 
 Click "disconnect" button when you want to leave this chat room.
+
+# Kubernetes
+
+## Create and publish docker image
+
+A Dockerfile at the root can be used to build a docker image with the redis chat front end.
+
+```
+docker build -t <user-name>/redis-chat
+docker push -t <user-name>/redis-chat
+```
+
+## Deploy to kubernetes
+
+*Prereq: Update redis-chat-web-deployment to reference the <user-name> you pushed the image to.  Or use dpfefferatpivotal.*
+
+You can deploy redis-chat to kubernetes using the manifest files below
+
+```
+kubectl apply -f k8s/redis-chat-redis-deployment.yml \
+    -f k8s/redis-chat-redis-service.yml \
+    -f k8s/redis-chat-web-deployment.yml \
+    -f k8s/redis-chat-web-service.yml
+```
+
+

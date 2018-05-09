@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: redis-chat-web
+    deployment: redis-chat
+  name: redis-chat-web-service
+spec:
+  ports:
+  - port: 3000
+    name: redis
+  type: NodePort
+  selector:
+    app: redis-chat-web

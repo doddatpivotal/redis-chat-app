@@ -65,6 +65,16 @@ if (process.env.REDIS_SERVICE_NAME) {
   }
 }
 
+if (process.env.REDIS_HOST_NAME) {
+    redis_cred["hostname"] = process.env.REDIS_HOST_NAME;
+}
+if (process.env.REDIS_PASSWORD) {
+    redis_cred["password"] = process.env.REDIS_PASSWORD;
+}
+if (process.env.REDIS_PORT) {
+    redis_cred["port"] = process.env.REDIS_PORT;
+}
+
 if (!redis_cred) {
   console.log('No Redis service bound to this app.');
   process.exit(1);

@@ -1,0 +1,28 @@
+apiVersion: apps/v1 # for versions before 1.9.0 use apps/v1beta2
+kind: Deployment
+metadata:
+  name: redis-chat-web
+spec:
+  selector:
+    matchLabels:
+      app: redis-chat-web
+      deployment: redis-chat
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: redis-chat-web
+        deployment: redis-chat
+    spec:
+      containers:
+      - name: redis-chat
+        image: dpfefferatpivotal/redis-chat
+        resources:
+          requests:
+            cpu: 200m
+            memory: 200Mi
+        ports:
+        - containerPort: 3000
+        env:
+        - name: REDIS_HOST_NAME
+          value: redis-chat-redis-service

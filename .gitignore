@@ -55,3 +55,7 @@ jspm_packages
 
 # Target Files
 target
+
+# IDEA files
+.idea
+*.iml

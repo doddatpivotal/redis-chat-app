@@ -57,3 +57,28 @@ Then query kubernetes to obtain the external url of the redis-chat app.
 ```
 echo http://$(kubectl get nodes -o go-template='{{index ((index .items 0).metadata.labels) "spec.ip"}}'):$(kubectl get services/redis-chat-web-service -o go-template='{{(index .spec.ports 0).nodePort}}')
 ```
+
+## Clean up kubernetes resources
+
+```
+kubectl delete -f k8s/redis-chat-redis-deployment.yml \
+    -f k8s/redis-chat-redis-service.yml \
+    -f k8s/redis-chat-web-deployment.yml \
+    -f k8s/redis-chat-web-service.yml
+```
+
+## Setting up Kubernetes to access harbor registry
+
+```
+kubectl create secret docker-registry regsecret \
+--docker-server="harbor.pks.haas-125.pez.pivotal.io" \
+--docker-username="dpfefferatpivotal" \
+--docker-password="**********" \
+--docker-email="dpfeffer@pivotal.io"
+```
+
+# Deploy to CF Commands
+```
+cf create-service p-redis dedicated-vm chat-db
+cf push
+```

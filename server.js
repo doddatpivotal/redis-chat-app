@@ -15,6 +15,7 @@ var app = express();
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
 var port = process.env.PORT || 3000;
+var fetch = require('node-fetch');
 
 var cfenv = require('cfenv');
 // default config for local redis (overridden when run on cloud foundry)
@@ -152,15 +153,22 @@ io.on('connection', function(socket) {
 
         socket.on('send', function(message_text) {
             var date = moment.now();
-            var message = JSON.stringify({
+            var jsonMessage = {
                 date: date,
                 username: member['username'],
                 avatar: member['avatar'],
                 message: message_text
-            });
+            };
+            var message = JSON.stringify(jsonMessage);
 
-            redis.zadd('messages', date, message);
-            redis.publish('messages', message);
+            var feederUrl = process.env['FEEDER_URL'];
+
+            if(feederUrl) {
+                sendMessage(feederUrl, jsonMessage);
+            } else {
+                redis.zadd('messages', date, message);
+                redis.publish('messages', message);
+            }
         });
 
         socket.on('disconnect', function() {
@@ -175,3 +183,31 @@ io.on('connection', function(socket) {
 http.listen(port, function() {
     console.log('Started server on port ' + port);
 });
+
+// Publishes event when using the redis-chat-plus example with riff
+// http://github.com/doddatpivotal/redis-chat-plus-demo-setup.git
+function sendMessage(feederUrl, message) {
+
+    var channelUrl = (process.env['CHANNEL_URL'] || "http://redis-chat-plus-events-channel.default.svc.cluster.local");
+
+    var event = {
+        "channelUrl":channelUrl,
+        "message": {
+            "eventName": "messageSent",
+            "eventBody": message
+        }
+    }
+    var jsonString = JSON.stringify(event);
+    fetch(feederUrl, {
+        method: 'POST',
+        body: jsonString,
+        headers: {'Content-Type': 'application/json'}
+    })
+    .then(res => console.log('posted %s to %s %s', jsonString, feederUrl, res.status))
+    .catch(err => console.log(err));
+
+    var out = `posting ${jsonString} to ${feederUrl}/s`;
+    console.log(out);
+    return out;
+
+}

@@ -13,6 +13,8 @@ spec:
             - name: REDIS_HOST_NAME
               value: redis-chat-redis-service
             - name: FEEDER_URL
-              value: "http://channel-feeder.default.doddpfeffer.com" # replace doddpfeffer.com with your custom domain
-            - name: version
-              value: "6"
+              valueFrom:
+                configMapKeyRef:
+                  name: redis-chat-web-config
+                  key: FEEDER_URL
+# Setup a configmap similar to `kubectl create configmap redis-chat-web-config --from-literal=FEEDER_URL="http://channel-feeder.default.<CUSTOM_DOMAIN>"`

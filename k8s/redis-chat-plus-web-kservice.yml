@@ -5,21 +5,10 @@ metadata:
 spec:
   runLatest:
     configuration:
-      build:
-        serviceAccountName: riff-build
-        source:
-          git:
-            url: https://github.com/doddatpivotal/redis-chat-app.git
-            revision: master
-        template:
-          name: kaniko
-          arguments:
-          - name: IMAGE
-            value: gcr.io/fe-dpfeffer/redis-chat-web # Update with your registry location
       revisionTemplate:
         spec:
           container:
-            image: gcr.io/fe-dpfeffer/redis-chat-web # Update with your registry location
+            image: dpfefferatpivotal/redis-chat:potty # Update with your registry location
             env:
             - name: REDIS_HOST_NAME
               value: redis-chat-redis-service

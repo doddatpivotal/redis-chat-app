@@ -1,4 +1,6 @@
 #!/usr/bin/env bash
 
-kubectl apply -f k8s/redis-chat-redis-deployment.yaml
-kubectl apply -f k8s/redis-chat-web-kservice.yaml
+localpath=${1:-.}
+
+kubectl apply -f $localpath/k8s/redis-chat-redis-deployment.yml
+kubectl apply -f $localpath/k8s/redis-chat-web-kservice.yml

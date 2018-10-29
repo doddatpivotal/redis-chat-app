@@ -23,3 +23,9 @@ spec:
             env:
             - name: REDIS_HOST_NAME
               value: redis-chat-redis-service
+            - name: FEEDER_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: redis-chat-web-config
+                  key: FEEDER_URL
+# Setup a configmap similar   to `kubectl create configmap redis-chat-web-config --from-literal=FEEDER_URL="http://channel-feeder.default.<CUSTOM_DOMAIN>"`

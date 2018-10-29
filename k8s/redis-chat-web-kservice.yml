@@ -13,6 +13,6 @@ spec:
             - name: REDIS_HOST_NAME
               value: redis-chat-redis-service
             - name: FEEDER_URL
-              value: "http://channel-feeder.default.doddpfeffer.com"
+              value: "http://channel-feeder.default.doddpfeffer.com" # replace doddpfeffer.com with your custom domain
             - name: version
               value: "6"
